@@ -1,0 +1,22 @@
+# 使用官方 Node.js LTS 镜像
+FROM node:20-alpine
+
+# 设置工作目录
+WORKDIR /usr/src/app
+
+# 复制 package.json & package-lock.json 并安装依赖
+COPY package*.json ./
+RUN npm install --production
+
+# 复制源代码
+COPY server.js ./
+COPY .env .env
+
+# 创建 images 文件夹
+RUN mkdir -p images
+
+# 暴露端口
+EXPOSE 3001
+
+# 启动命令
+CMD ["node", "server.js"]
