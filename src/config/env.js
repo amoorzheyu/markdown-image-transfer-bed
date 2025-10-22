@@ -14,6 +14,9 @@ export const env = {
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   SESSION_SECRET: process.env.SESSION_SECRET || 'your-secret-key-change-this',
   
+  // Cookie 配置
+  COOKIE_SECURE: process.env.COOKIE_SECURE === 'true',  // 默认 false，支持 HTTP
+  
   // API 配置
   API_KEY: process.env.API_KEY,
   
@@ -37,6 +40,10 @@ export function validateEnv() {
   
   if (env.SESSION_SECRET === 'your-secret-key-change-this') {
     console.warn('⚠️  警告: 请修改 SESSION_SECRET 为随机字符串');
+  }
+  
+  if (env.NODE_ENV === 'production' && !env.COOKIE_SECURE) {
+    console.warn('⚠️  提示: 生产环境下 COOKIE_SECURE=false，支持 HTTP 访问（如需 HTTPS 专用请设置 COOKIE_SECURE=true）');
   }
 }
 

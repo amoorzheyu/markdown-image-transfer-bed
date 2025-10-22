@@ -22,6 +22,7 @@ EXPOSE 3001
 # 设置环境变量（可通过 docker run -e 覆盖）
 ENV NODE_ENV=production
 ENV PORT=3001
+ENV COOKIE_SECURE=false
 
 # 启动命令
 CMD ["node", "server.js"]

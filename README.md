@@ -47,6 +47,11 @@ ADMIN_PASSWORD=your-secure-password
 # Session 密钥（必需，请修改为随机字符串）
 SESSION_SECRET=your-random-secret-key-here
 
+# Cookie 安全配置（可选）
+# true: 只允许 HTTPS 传输 Cookie（更安全，需要 SSL 证书）
+# false: HTTP 和 HTTPS 都可以（更通用，默认值）
+COOKIE_SECURE=false
+
 # API Key（可选）
 API_KEY=your-api-key-here
 ```
@@ -83,6 +88,8 @@ docker build -t image-host .
 docker run -d \
   -p 3000:3000 \
   -v $(pwd)/images:/usr/src/app/images \
+  -e NODE_ENV=production \
+  -e COOKIE_SECURE=false \
   -e ADMIN_USERNAME=admin \
   -e ADMIN_PASSWORD=your-password \
   -e SESSION_SECRET=your-secret-key \
@@ -274,6 +281,48 @@ X-API-Key: your-api-key (如果设置了 API_KEY)
 4. **启用 HTTPS** - 生产环境建议使用 HTTPS 协议
 5. **限制访问** - 建议配置防火墙或反向代理限制访问
 6. **设置 API Key** - 为外部上传接口设置 API Key
+
+## 🔧 环境变量说明
+
+### COOKIE_SECURE
+
+控制 Session Cookie 是否仅通过 HTTPS 传输。
+
+**配置值**：
+- `true`: 启用安全模式，Cookie 仅通过 HTTPS 传输（推荐用于有 SSL 证书的生产环境）
+- `false`: 兼容模式，HTTP 和 HTTPS 都可以使用（默认值，适用于测试环境或无 SSL 证书的部署）
+
+**使用场景**：
+
+| 场景 | NODE_ENV | COOKIE_SECURE | 说明 |
+|------|----------|---------------|------|
+| 本地开发 | development | false | 支持 HTTP 访问 |
+| 测试服务器（无SSL） | production | false | 支持 HTTP 访问，更通用 ✅ |
+| 生产环境（有SSL） | production | true | 只允许 HTTPS，更安全 🔒 |
+
+**Docker 部署示例**：
+
+```bash
+# HTTP 环境（无 SSL 证书）- 通用部署
+docker run -d \
+  -p 3000:3000 \
+  -e COOKIE_SECURE=false \
+  -e ADMIN_USERNAME=admin \
+  -e ADMIN_PASSWORD=your-password \
+  -e SESSION_SECRET=your-secret-key \
+  --name image-host \
+  image-host
+
+# HTTPS 环境（配合 Nginx/Caddy）- 安全部署
+docker run -d \
+  -p 3000:3000 \
+  -e COOKIE_SECURE=true \
+  -e ADMIN_USERNAME=admin \
+  -e ADMIN_PASSWORD=your-password \
+  -e SESSION_SECRET=your-secret-key \
+  --name image-host \
+  image-host
+```
 
 ## 🛠️ 技术栈
 

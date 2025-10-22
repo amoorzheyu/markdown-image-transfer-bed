@@ -43,7 +43,7 @@ app.use(session({
   cookie: {
     maxAge: SESSION_CONFIG.COOKIE_MAX_AGE,
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
+    secure: env.COOKIE_SECURE,  // 通过环境变量控制，默认 false 支持 HTTP
     sameSite: 'lax'
   },
   name: SESSION_CONFIG.COOKIE_NAME
