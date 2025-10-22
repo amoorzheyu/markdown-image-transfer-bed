@@ -1,2 +1,27 @@
-/node_modules/*
-/images/*
+# 依赖
+node_modules/
+
+# 环境变量
+.env
+
+# 日志
+*.log
+npm-debug.log*
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 图片存储（保留目录但忽略内容）
+images/*
+!images/.gitkeep
+
+# 临时文件
+*.tmp
+.cache/
