@@ -2,7 +2,7 @@ import app from './src/app.js';
 import { env } from './src/config/env.js';
 import { logger } from './src/utils/logger.js';
 
-const PORT = env.PORT;
+const PORT = 3000;
 
 // 启动服务器
 app.listen(PORT, () => {
